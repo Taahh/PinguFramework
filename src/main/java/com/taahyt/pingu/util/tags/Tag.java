@@ -1,4 +1,4 @@
-package com.taahyt.pingu.util;
+package com.taahyt.pingu.util.tags;
 
 import com.google.common.collect.Lists;
 import com.taahyt.pingu.util.packet.PacketBuffer;

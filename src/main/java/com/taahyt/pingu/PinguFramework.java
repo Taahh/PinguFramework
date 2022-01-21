@@ -54,10 +54,11 @@ public class PinguFramework
             {
                 protected void initChannel(SocketChannel socketChannel) throws Exception
                 {
-//                    socketChannel.pipeline().addLast(new Varint21FrameDecoder());
-//                    socketChannel.pipeline().addLast(new Varint21LengthFieldPrepender());
-                    socketChannel.pipeline().addLast("timeout", new ReadTimeoutHandler(30)).addLast("splitter", new Varint21FrameDecoder()).addLast("prepender", new Varint21LengthFieldPrepender()).addLast("decoder", new PacketDecoder())/*.addLast("encoder", new PacketEncoder(PacketFlow.SERVERBOUND)).addLast("packet_handler", connection)*/;
-                    //socketChannel.pipeline().addLast(new PacketHandler());
+                    socketChannel.pipeline().
+                            addLast("timeout", new ReadTimeoutHandler(30)).
+                            addLast("splitter", new Varint21FrameDecoder()).
+                            addLast("prepender", new Varint21LengthFieldPrepender()).
+                            addLast("decoder", new PacketDecoder());
                 }
             });
             ChannelFuture channelFuture = serverBootstrap.bind().sync();

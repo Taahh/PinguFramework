@@ -21,6 +21,7 @@ public class ClientboundTagPacket extends AbstractMessage
     @Override
     public ByteBuf serialize(ChannelHandlerContext channel)
     {
+        System.out.println("Tags!");
         PacketBuffer buffer = new PacketBuffer();
         buffer.writeVarInt(this.getPacketId());
         return buffer;

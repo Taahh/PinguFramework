@@ -45,7 +45,6 @@ public class ServerboundClientSettingsMessage extends AbstractMessage
 
         ClientboundTagPacket tags = new ClientboundTagPacket();
         channel.writeAndFlush(tags.serialize(channel));
-        CompoundTag tag = new CompoundTag();
 
         /*ClientboundEntityStatusPacket entityStatusPacket = new ClientboundEntityStatusPacket();
         channel.writeAndFlush(entityStatusPacket.serialize(channel));
