@@ -2,7 +2,7 @@ package com.taahyt.pingu.messages.status;
 
 import com.taahyt.pingu.messages.AbstractMessage;
 import com.taahyt.pingu.messages.Messages;
-import com.taahyt.pingu.util.PacketBuffer;
+import com.taahyt.pingu.util.packet.PacketBuffer;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 

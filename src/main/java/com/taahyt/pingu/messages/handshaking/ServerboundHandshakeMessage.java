@@ -2,15 +2,11 @@ package com.taahyt.pingu.messages.handshaking;
 
 import com.taahyt.pingu.PinguFramework;
 import com.taahyt.pingu.messages.AbstractMessage;
-import com.taahyt.pingu.messages.Messages;
-import com.taahyt.pingu.messages.status.ServerboundRequestMessage;
-import com.taahyt.pingu.util.PacketBuffer;
+import com.taahyt.pingu.util.packet.PacketBuffer;
 import com.taahyt.pingu.util.Status;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.SneakyThrows;
-
-import java.util.UUID;
 
 
 public class ServerboundHandshakeMessage extends AbstractMessage

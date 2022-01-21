@@ -1,4 +1,4 @@
-package com.taahyt.pingu.util;
+package com.taahyt.pingu.util.chat;
 
 import com.google.gson.Gson;
 import lombok.Data;

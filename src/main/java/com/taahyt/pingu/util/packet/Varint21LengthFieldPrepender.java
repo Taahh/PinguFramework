@@ -1,7 +1,6 @@
-package com.taahyt.pingu.util;
+package com.taahyt.pingu.util.packet;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBufUtil;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
 

@@ -1,10 +1,10 @@
 package com.taahyt.pingu;
 
 import com.taahyt.pingu.messages.play.ClientboundTimeUpdateMessage;
-import com.taahyt.pingu.util.PacketDecoder;
+import com.taahyt.pingu.handler.PacketDecoder;
 import com.taahyt.pingu.util.Status;
-import com.taahyt.pingu.util.Varint21FrameDecoder;
-import com.taahyt.pingu.util.Varint21LengthFieldPrepender;
+import com.taahyt.pingu.util.packet.Varint21FrameDecoder;
+import com.taahyt.pingu.util.packet.Varint21LengthFieldPrepender;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerContext;

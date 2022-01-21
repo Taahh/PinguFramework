@@ -1,4 +1,4 @@
-package com.taahyt.pingu.util;
+package com.taahyt.pingu.util.chat;
 
 public enum ChatColor
 {

@@ -2,10 +2,7 @@ package com.taahyt.pingu.messages.login;
 
 import com.taahyt.pingu.PinguFramework;
 import com.taahyt.pingu.messages.AbstractMessage;
-import com.taahyt.pingu.messages.play.ClientboundJoinGameMessage;
-import com.taahyt.pingu.util.ChatColor;
-import com.taahyt.pingu.util.ChatComponent;
-import com.taahyt.pingu.util.PacketBuffer;
+import com.taahyt.pingu.util.packet.PacketBuffer;
 import com.taahyt.pingu.util.Status;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;

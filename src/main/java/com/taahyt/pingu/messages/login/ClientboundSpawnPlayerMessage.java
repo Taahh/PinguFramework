@@ -1,9 +1,7 @@
 package com.taahyt.pingu.messages.login;
 
-import com.taahyt.pingu.PinguFramework;
 import com.taahyt.pingu.messages.AbstractMessage;
-import com.taahyt.pingu.util.PacketBuffer;
-import com.taahyt.pingu.util.Status;
+import com.taahyt.pingu.util.packet.PacketBuffer;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.SneakyThrows;

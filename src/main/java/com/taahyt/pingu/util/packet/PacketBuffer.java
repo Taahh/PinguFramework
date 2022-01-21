@@ -1,4 +1,4 @@
-package com.taahyt.pingu.util;
+package com.taahyt.pingu.util.packet;
 
 
 import io.netty.buffer.ByteBuf;
@@ -9,7 +9,6 @@ import io.netty.handler.codec.DecoderException;
 import io.netty.handler.codec.EncoderException;
 import io.netty.util.ByteProcessor;
 import net.querz.nbt.io.NBTOutputStream;
-import net.querz.nbt.tag.CompoundTag;
 import net.querz.nbt.tag.Tag;
 import org.jetbrains.annotations.Nullable;
 

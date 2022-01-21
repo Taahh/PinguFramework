@@ -1,9 +1,9 @@
 package com.taahyt.pingu.messages.status;
 
 import com.taahyt.pingu.messages.AbstractMessage;
-import com.taahyt.pingu.util.ChatColor;
-import com.taahyt.pingu.util.ChatComponent;
-import com.taahyt.pingu.util.PacketBuffer;
+import com.taahyt.pingu.util.chat.ChatColor;
+import com.taahyt.pingu.util.chat.ChatComponent;
+import com.taahyt.pingu.util.packet.PacketBuffer;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 

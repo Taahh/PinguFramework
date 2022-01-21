@@ -1,6 +1,7 @@
 package com.taahyt.pingu.util;
 
 import com.google.common.collect.Lists;
+import com.taahyt.pingu.util.packet.PacketBuffer;
 import lombok.Data;
 
 import java.util.List;

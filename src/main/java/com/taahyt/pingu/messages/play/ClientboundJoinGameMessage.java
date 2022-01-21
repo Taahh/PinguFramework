@@ -2,7 +2,7 @@ package com.taahyt.pingu.messages.play;
 
 import com.google.common.collect.Lists;
 import com.taahyt.pingu.messages.AbstractMessage;
-import com.taahyt.pingu.util.PacketBuffer;
+import com.taahyt.pingu.util.packet.PacketBuffer;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import net.querz.nbt.io.SNBTDeserializer;
@@ -11,7 +11,6 @@ import net.querz.nbt.tag.CompoundTag;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class ClientboundJoinGameMessage extends AbstractMessage

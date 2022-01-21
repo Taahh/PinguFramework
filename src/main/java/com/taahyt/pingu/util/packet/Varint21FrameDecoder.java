@@ -1,4 +1,4 @@
-package com.taahyt.pingu.util;
+package com.taahyt.pingu.util.packet;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
