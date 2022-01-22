@@ -3,35 +3,33 @@ package com.taahyt.pingu.messages.play;
 import com.taahyt.pingu.PinguFramework;
 import com.taahyt.pingu.messages.AbstractMessage;
 import com.taahyt.pingu.player.Player;
+import com.taahyt.pingu.util.chat.ChatComponent;
 import com.taahyt.pingu.util.packet.PacketBuffer;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 
 import java.net.InetSocketAddress;
 
-public class ServerboundTeleportConfirmMessage extends AbstractMessage
+public class ServerboundChatMessage extends AbstractMessage
 {
-
-    public int teleportId;
-
-    public ServerboundTeleportConfirmMessage()
+    private String message;
+    public ServerboundChatMessage()
     {
-        super(0x00);
+        super(0x03);
     }
-
 
     @Override
     public void deserialize(ChannelHandlerContext channel, PacketBuffer buf)
     {
-        System.out.println("DESERIALIZING TELEPORT CONFIRM");
-        this.teleportId = buf.readVarInt();
+        System.out.println("CHAT MESSAGE");
+        this.message = buf.readString();
         Player player = PinguFramework.getServer().getPlayer((InetSocketAddress) channel.channel().remoteAddress());
+        ChatComponent comp = new ChatComponent();
+        comp.setText(this.message);
         if (player != null)
         {
-            ClientboundPlayerPositionMessage clientboundPlayerPositionMessage = new ClientboundPlayerPositionMessage(player.getLocation(), this.teleportId);
-            channel.writeAndFlush(clientboundPlayerPositionMessage.serialize(channel));
+            PinguFramework.getServer().getOnlinePlayers().forEach(p -> p.getConnection().writeAndFlush(new ClientboundChatMessage(comp, player.getUuid())));
         }
-
     }
 
     @Override

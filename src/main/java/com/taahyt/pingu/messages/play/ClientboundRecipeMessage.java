@@ -7,6 +7,7 @@ import io.netty.channel.ChannelHandlerContext;
 
 public class ClientboundRecipeMessage extends AbstractMessage
 {
+    //TODO: Do recipes
     public ClientboundRecipeMessage()
     {
         super(0x66);

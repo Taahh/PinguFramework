@@ -7,9 +7,11 @@ import io.netty.channel.ChannelHandlerContext;
 
 public class ClientboundSlotMessage extends AbstractMessage
 {
-    public ClientboundSlotMessage()
+    private final int slot;
+    public ClientboundSlotMessage(int slot)
     {
         super(0x48);
+        this.slot = slot;
     }
 
     @Override
@@ -24,7 +26,7 @@ public class ClientboundSlotMessage extends AbstractMessage
         System.out.println("Slot Change");
         PacketBuffer buffer = new PacketBuffer();
         buffer.writeVarInt(this.getPacketId());
-        buffer.writeByte(0);
+        buffer.writeByte(this.slot);
         return buffer;
     }
 }

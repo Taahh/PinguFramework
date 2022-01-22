@@ -9,29 +9,32 @@ import io.netty.channel.ChannelHandlerContext;
 
 import java.net.InetSocketAddress;
 
-public class ServerboundTeleportConfirmMessage extends AbstractMessage
+public class ServerboundPlayerRotationMessage extends AbstractMessage
 {
+    private float yaw;
+    private float pitch;
+    private boolean onGround;
 
-    public int teleportId;
-
-    public ServerboundTeleportConfirmMessage()
+    public ServerboundPlayerRotationMessage()
     {
-        super(0x00);
+        super(0x13);
     }
 
 
     @Override
     public void deserialize(ChannelHandlerContext channel, PacketBuffer buf)
     {
-        System.out.println("DESERIALIZING TELEPORT CONFIRM");
-        this.teleportId = buf.readVarInt();
+        System.out.println("DESERIALIZING PLAYER ROTATION");
+        this.yaw = buf.readFloat();
+        this.pitch = buf.readFloat();
+        this.onGround = buf.readBoolean();
         Player player = PinguFramework.getServer().getPlayer((InetSocketAddress) channel.channel().remoteAddress());
         if (player != null)
         {
-            ClientboundPlayerPositionMessage clientboundPlayerPositionMessage = new ClientboundPlayerPositionMessage(player.getLocation(), this.teleportId);
-            channel.writeAndFlush(clientboundPlayerPositionMessage.serialize(channel));
+            player.getLocation().setYaw(this.yaw);
+            player.getLocation().setPitch(this.pitch);
+            player.setOnGround(this.onGround);
         }
-
     }
 
     @Override
@@ -39,4 +42,5 @@ public class ServerboundTeleportConfirmMessage extends AbstractMessage
     {
         return null;
     }
+
 }

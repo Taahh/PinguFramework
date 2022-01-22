@@ -22,37 +22,6 @@ public class ServerboundHandshakeMessage extends AbstractMessage
     {
         System.out.println("Readable Bytes:" + buf.readableBytes());
 
-        /*if (PinguFramework.CLIENTS.containsKey(channel.channel().remoteAddress()) && PinguFramework.CLIENTS.get(channel.channel().remoteAddress()) == Status.LOGIN)
-        {
-            String name = buf.readString();
-            UUID uuid = UUID.randomUUID();
-            System.out.println("Player Name: " + name);
-            PacketBuffer buffer = new PacketBuffer();
-            buffer.writeVarInt(0x02);
-            buffer.writeUUID(uuid);
-            buffer.writeString(name);
-            channel.writeAndFlush(buffer).sync();
-
-            PacketBuffer buffer2 = new PacketBuffer();
-            buffer2.writeVarInt(0x04);
-            buffer2.writeVarInt(1);
-            buffer2.writeUUID(uuid);
-            buffer2.writeDouble(5);
-            buffer2.writeDouble(100);
-            buffer2.writeDouble(5);
-            buffer2.writeByte(90);
-            buffer2.writeByte(5);
-
-            channel.writeAndFlush(buffer2).sync();
-            return;
-        }
-
-        if (PinguFramework.CLIENTS.containsKey(channel.channel().remoteAddress()) && PinguFramework.CLIENTS.get(channel.channel().remoteAddress()) == Status.STATUS) {
-            ServerboundRequestMessage packet = (ServerboundRequestMessage) Messages.REQUEST.getMessage();
-            packet.deserialize(channel, buf);
-            return;
-        }*/
-
         System.out.println("Deserializing Handshake");
 
         int protocolVersion = buf.readVarInt();

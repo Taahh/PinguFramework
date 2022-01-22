@@ -1,6 +1,7 @@
 package com.taahyt.pingu.util;
 
 import com.google.common.collect.Maps;
+import com.taahyt.pingu.player.profile.SkinProperty;
 import lombok.SneakyThrows;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -14,11 +15,12 @@ import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Easily access mojang utilities through web requests
+ *
  * @author Taah
  */
 
@@ -31,6 +33,7 @@ public class MojangUtil
 
     /**
      * Gets UUID of a player
+     *
      * @param name Player username
      * @return UUID in String format
      */
@@ -38,34 +41,66 @@ public class MojangUtil
     {
         CloseableHttpClient client = HttpClients.createDefault();
         HttpGet get = new HttpGet("https://api.mojang.com/users/profiles/minecraft/" + name);
-        try {
+        try
+        {
             HttpResponse response = client.execute(get);
-            if (response.getStatusLine().getStatusCode() == 200) {
+            if (response.getStatusLine().getStatusCode() == 200)
+            {
                 String json = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
                 JSONObject object = new JSONObject(json);
                 client.close();
-                return object.getString("id");
+
+                return new StringBuilder(object.getString("id"))
+                        .insert(8, "-").insert(13, "-").insert(18, "-").insert(23, "-").toString();
             } else {
                 return "not found";
             }
-        } catch (IOException e) {
+        } catch (IOException e)
+        {
             //e.printStackTrace();
+            return "not found";
         }
-        return "not found";
+    }
+
+    public static SkinProperty getSkinProperty(UUID uuid)
+    {
+        CloseableHttpClient client = HttpClients.createDefault();
+        HttpGet get = new HttpGet("https://sessionserver.mojang.com/session/minecraft/profile/" + uuid.toString().replace("-", "") + "?unsigned=false");
+        try
+        {
+            HttpResponse response = client.execute(get);
+            if (response.getStatusLine().getStatusCode() == 200)
+            {
+                String json = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
+                JSONObject object = new JSONObject(json);
+                client.close();
+
+                return new SkinProperty(object.getJSONArray("properties").getJSONObject(0).getString("value"), object.getJSONArray("properties").getJSONObject(0).getString("signature"));
+            } else {
+                return null;
+            }
+        } catch (IOException e)
+        {
+            //e.printStackTrace();
+            return null;
+        }
     }
 
     /**
      * Gets the skin value and signature of a player using Mineskin API
+     *
      * @param username Player username
      * @return A completable future containing an array of data (0: value, 1: signature)
      */
     @SneakyThrows
     public static CompletableFuture<String[]> getSkinData(String username)
     {
-        return CompletableFuture.supplyAsync(() -> {
+        return CompletableFuture.supplyAsync(() ->
+        {
             CloseableHttpClient client = HttpClients.createDefault();
             HttpGet get = new HttpGet("https://api.mineskin.org/generate/user/" + getUUID(username));
-            try {
+            try
+            {
                 HttpResponse response = client.execute(get);
                 String json = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
                 JSONObject object = new JSONObject(json);
@@ -83,7 +118,8 @@ public class MojangUtil
                     }
                 }, 5000);
                 return new String[]{value, signature};
-            } catch (IOException e) {
+            } catch (IOException e)
+            {
                 e.printStackTrace();
                 return null;
             }

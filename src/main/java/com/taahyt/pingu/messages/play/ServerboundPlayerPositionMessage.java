@@ -9,29 +9,36 @@ import io.netty.channel.ChannelHandlerContext;
 
 import java.net.InetSocketAddress;
 
-public class ServerboundTeleportConfirmMessage extends AbstractMessage
+public class ServerboundPlayerPositionMessage extends AbstractMessage
 {
+    private double x;
+    private double y;
+    private double z;
 
-    public int teleportId;
+    private boolean onGround;
 
-    public ServerboundTeleportConfirmMessage()
+    public ServerboundPlayerPositionMessage()
     {
-        super(0x00);
+        super(0x11);
     }
 
 
     @Override
     public void deserialize(ChannelHandlerContext channel, PacketBuffer buf)
     {
-        System.out.println("DESERIALIZING TELEPORT CONFIRM");
-        this.teleportId = buf.readVarInt();
+        System.out.println("DESERIALIZING PLAYER POS");
+        this.x = buf.readDouble();
+        this.y = buf.readDouble();
+        this.z = buf.readDouble();
+        this.onGround = buf.readBoolean();
         Player player = PinguFramework.getServer().getPlayer((InetSocketAddress) channel.channel().remoteAddress());
         if (player != null)
         {
-            ClientboundPlayerPositionMessage clientboundPlayerPositionMessage = new ClientboundPlayerPositionMessage(player.getLocation(), this.teleportId);
-            channel.writeAndFlush(clientboundPlayerPositionMessage.serialize(channel));
+            player.getLocation().setX(this.x);
+            player.getLocation().setY(this.y);
+            player.getLocation().setZ(this.z);
+            player.setOnGround(this.onGround);
         }
-
     }
 
     @Override
@@ -39,4 +46,5 @@ public class ServerboundTeleportConfirmMessage extends AbstractMessage
     {
         return null;
     }
+
 }

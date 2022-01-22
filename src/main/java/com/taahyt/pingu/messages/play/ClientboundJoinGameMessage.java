@@ -1,7 +1,11 @@
 package com.taahyt.pingu.messages.play;
 
 import com.google.common.collect.Lists;
+import com.taahyt.pingu.PinguFramework;
 import com.taahyt.pingu.messages.AbstractMessage;
+import com.taahyt.pingu.player.Player;
+import com.taahyt.pingu.server.World;
+import com.taahyt.pingu.server.gamemode.GameMode;
 import com.taahyt.pingu.util.packet.PacketBuffer;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -11,14 +15,19 @@ import net.querz.nbt.tag.CompoundTag;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.util.List;
 
 public class ClientboundJoinGameMessage extends AbstractMessage
 {
+    private final GameMode gameMode;
+    private final Player player;
 
-    public ClientboundJoinGameMessage()
+    public ClientboundJoinGameMessage(GameMode gameMode, Player player)
     {
         super(0x26);
+        this.gameMode = gameMode;
+        this.player = player;
     }
 
     @Override
@@ -32,11 +41,20 @@ public class ClientboundJoinGameMessage extends AbstractMessage
     {
         System.out.println("CLIENTBOUND JOIN GAME");
         PacketBuffer buffer = new PacketBuffer();
+
+        World world = new World("overworld");
+        this.player.setCurrentWorld(world);
+        this.player.setGameMode(this.gameMode);
+
+        world.addEntity(this.player);
+
+
         buffer.writeVarInt(this.getPacketId());
-        buffer.writeInt(0);
+        buffer.writeInt(this.player.getId());
         buffer.writeBoolean(false);
-        buffer.writeByte(1);
+        buffer.writeByte(this.gameMode.getId());
         buffer.writeByte(-1);
+
 
         File file = new File("./test.snbt");
         try
@@ -45,17 +63,21 @@ public class ClientboundJoinGameMessage extends AbstractMessage
             CompoundTag dimensionTypes = compoundTag.getCompoundTag("minecraft:dimension_type");
 
             List<String> dimensions = Lists.newArrayList();
-            dimensionTypes.getListTag("value").asCompoundTagList().forEach(tag -> {
+            dimensionTypes.getListTag("value").asCompoundTagList().forEach(tag ->
+            {
                 dimensions.add(tag.getString("name"));
             });
 
 //            buffer.writeVarInt(dimensions.size());
             buffer.writeCollection(dimensions, PacketBuffer::writeString);
             buffer.writeNbt(compoundTag);
-            dimensionTypes.getListTag("value").asCompoundTagList().forEach(tag -> {
+            dimensionTypes.getListTag("value").asCompoundTagList().forEach(tag ->
+            {
                 if (tag.getString("name").equalsIgnoreCase("minecraft:overworld"))
                 {
-                    buffer.writeNbt(tag.getCompoundTag("element"));
+                    CompoundTag dimensionType = tag.getCompoundTag("element");
+                    buffer.writeNbt(dimensionType);
+                    world.setDimensionType(dimensionType);
                 }
             });
 
@@ -73,6 +95,7 @@ public class ClientboundJoinGameMessage extends AbstractMessage
         buffer.writeBoolean(false);
         buffer.writeBoolean(true);
         buffer.writeBoolean(true);
+        PinguFramework.getServer().addWorld(world);
 
         return buffer;
     }

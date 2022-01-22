@@ -32,24 +32,6 @@ public class ClientboundTagMessage extends AbstractMessage
 
         List<Tag> tags = Lists.newArrayList();
 
-        /*Tag tag = new Tag("minecraft:block");
-        tag.getChildren().addAll(TagUtil.BLOCK_TAGS);
-        tag.getChildren().addAll(TagUtil.ITEM_TAGS);
-        tag.getChildren().addAll(TagUtil.GAME_EVENTS);
-        tag.getChildren().addAll(TagUtil.ENTITY_TAGS);
-        tag.getChildren().addAll(TagUtil.FLUIDS);
-        tags.add(tag);
-
-        buffer.writeCollection(tags, (packetBuffer, tag1) -> {
-            System.out.println("Tag 1" + tag1.getName());
-            //tag1 is minecraft:block etc.
-            packetBuffer.writeCollection(tag1.getChildren(), (packetBuffer1, tag2) -> {
-                //tag2 is like actual tag names
-                System.out.println("Tag2: " + tag2.getName());
-                tag2.write(buffer);
-            });
-        });
-*/
         Tag block = new Tag("minecraft:block");
         block.getChildren().addAll(TagUtil.BLOCK_TAGS);
         tags.add(block);

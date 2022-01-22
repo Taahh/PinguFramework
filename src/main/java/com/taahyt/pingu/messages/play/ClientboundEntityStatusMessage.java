@@ -7,9 +7,11 @@ import io.netty.channel.ChannelHandlerContext;
 
 public class ClientboundEntityStatusMessage extends AbstractMessage
 {
-    public ClientboundEntityStatusMessage()
+    private final int entityId;
+    public ClientboundEntityStatusMessage(int entityId)
     {
         super(0x1B);
+        this.entityId = entityId;
     }
 
     @Override
@@ -24,7 +26,7 @@ public class ClientboundEntityStatusMessage extends AbstractMessage
         System.out.println("Entity Status");
         PacketBuffer buffer = new PacketBuffer();
         buffer.writeVarInt(this.getPacketId());
-        buffer.writeInt(0);
+        buffer.writeInt(this.entityId);
         buffer.writeByte(28);
         return buffer;
     }

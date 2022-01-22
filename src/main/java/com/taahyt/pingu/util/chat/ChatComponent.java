@@ -6,7 +6,6 @@ import lombok.Data;
 @Data
 public class ChatComponent
 {
-
     public String text;
     public boolean bold, italic, underlined, strikethrough, obfuscated;
     public String color;

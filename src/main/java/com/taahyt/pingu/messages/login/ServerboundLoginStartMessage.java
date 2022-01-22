@@ -1,11 +1,16 @@
 package com.taahyt.pingu.messages.login;
 
+import com.taahyt.pingu.PinguFramework;
 import com.taahyt.pingu.messages.AbstractMessage;
 import com.taahyt.pingu.messages.play.ClientboundJoinGameMessage;
+import com.taahyt.pingu.player.Player;
+import com.taahyt.pingu.server.gamemode.GameMode;
 import com.taahyt.pingu.util.packet.PacketBuffer;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.SneakyThrows;
+
+import java.net.InetSocketAddress;
 
 public class ServerboundLoginStartMessage extends AbstractMessage
 {
@@ -21,11 +26,13 @@ public class ServerboundLoginStartMessage extends AbstractMessage
         final String name = buf.readString();
         System.out.println("Player Connecting: " + name);
 
-        ClientboundLoginSuccessMessage message = new ClientboundLoginSuccessMessage();
-        message.username = name;
         channel.writeAndFlush(new ClientboundSetCompressionMessage().serialize(channel)).sync();
-        channel.writeAndFlush(message.serialize(channel)).sync();
-        channel.writeAndFlush(new ClientboundJoinGameMessage().serialize(channel));
+        channel.writeAndFlush(new ClientboundLoginSuccessMessage(name).serialize(channel)).sync();
+        Player player = PinguFramework.getServer().getPlayer((InetSocketAddress) channel.channel().remoteAddress());
+        if (player != null)
+        {
+            channel.writeAndFlush(new ClientboundJoinGameMessage(GameMode.CREATIVE, player).serialize(channel));
+        }
     }
 
     @Override

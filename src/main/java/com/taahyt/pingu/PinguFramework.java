@@ -2,6 +2,7 @@ package com.taahyt.pingu;
 
 import com.taahyt.pingu.messages.play.ClientboundTimeUpdateMessage;
 import com.taahyt.pingu.handler.PacketDecoder;
+import com.taahyt.pingu.server.Server;
 import com.taahyt.pingu.util.EnumUtil;
 import com.taahyt.pingu.util.Status;
 import com.taahyt.pingu.util.packet.Varint21FrameDecoder;
@@ -17,6 +18,7 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.timeout.ReadTimeoutHandler;
+import lombok.Getter;
 import lombok.SneakyThrows;
 
 import java.io.File;
@@ -28,6 +30,8 @@ import java.util.TimerTask;
 
 public class PinguFramework
 {
+    @Getter
+    private static final Server server = new Server();
 
     public static final Map<ChannelHandlerContext, Status> CLIENTS = new HashMap<>();
 
