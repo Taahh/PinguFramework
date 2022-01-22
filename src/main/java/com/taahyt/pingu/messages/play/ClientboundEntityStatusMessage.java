@@ -5,11 +5,11 @@ import com.taahyt.pingu.util.packet.PacketBuffer;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 
-public class ClientboundRecipePacket extends AbstractMessage
+public class ClientboundEntityStatusMessage extends AbstractMessage
 {
-    public ClientboundRecipePacket()
+    public ClientboundEntityStatusMessage()
     {
-        super(0x66);
+        super(0x1B);
     }
 
     @Override
@@ -21,10 +21,11 @@ public class ClientboundRecipePacket extends AbstractMessage
     @Override
     public ByteBuf serialize(ChannelHandlerContext channel)
     {
-        System.out.println("Recipe");
+        System.out.println("Entity Status");
         PacketBuffer buffer = new PacketBuffer();
         buffer.writeVarInt(this.getPacketId());
-        buffer.writeVarInt(0);
+        buffer.writeInt(0);
+        buffer.writeByte(28);
         return buffer;
     }
 }

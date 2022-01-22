@@ -4,7 +4,6 @@ import com.taahyt.pingu.messages.AbstractMessage;
 import com.taahyt.pingu.util.packet.PacketBuffer;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-import net.querz.nbt.tag.CompoundTag;
 
 public class ServerboundClientSettingsMessage extends AbstractMessage
 {
@@ -40,17 +39,23 @@ public class ServerboundClientSettingsMessage extends AbstractMessage
         ClientboundSlotMessage message = new ClientboundSlotMessage();
         channel.writeAndFlush(message.serialize(channel));
 
-        ClientboundRecipePacket recipe = new ClientboundRecipePacket();
+        ClientboundRecipeMessage recipe = new ClientboundRecipeMessage();
         channel.writeAndFlush(recipe.serialize(channel));
 
-        ClientboundTagPacket tags = new ClientboundTagPacket();
+        ClientboundTagMessage tags = new ClientboundTagMessage();
         channel.writeAndFlush(tags.serialize(channel));
 
-        /*ClientboundEntityStatusPacket entityStatusPacket = new ClientboundEntityStatusPacket();
+        ClientboundEntityStatusMessage entityStatusPacket = new ClientboundEntityStatusMessage();
         channel.writeAndFlush(entityStatusPacket.serialize(channel));
 
-        ClientboundCommandPacket clientboundCommandPacket = new ClientboundCommandPacket();
-        channel.writeAndFlush(clientboundCommandPacket.serialize(channel));*/
+        ClientboundCommandMessage clientboundCommandMessage = new ClientboundCommandMessage();
+        channel.writeAndFlush(clientboundCommandMessage.serialize(channel));
+
+        ClientboundPlayerPositionMessage clientboundPlayerPositionMessage = new ClientboundPlayerPositionMessage(0);
+        channel.writeAndFlush(clientboundPlayerPositionMessage.serialize(channel));
+
+        ClientboundPlayerInfoMessage playerInfoMessage = new ClientboundPlayerInfoMessage();
+        channel.writeAndFlush(playerInfoMessage.serialize(channel));
     }
 
     @Override

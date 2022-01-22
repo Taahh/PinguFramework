@@ -4,6 +4,7 @@ import com.taahyt.pingu.messages.handshaking.*;
 import com.taahyt.pingu.messages.login.ServerboundLoginStartMessage;
 import com.taahyt.pingu.messages.play.ServerboundClientSettingsMessage;
 import com.taahyt.pingu.messages.play.ServerboundClientStatusMessage;
+import com.taahyt.pingu.messages.play.ServerboundTeleportConfirmMessage;
 import com.taahyt.pingu.messages.status.ClientboundPingMessage;
 import com.taahyt.pingu.messages.status.ClientboundRequestMessage;
 import com.taahyt.pingu.messages.status.ServerboundPingMessage;
@@ -26,6 +27,7 @@ public enum Messages
 
     LOGIN_START(0x00, new ServerboundLoginStartMessage(), Status.LOGIN),
 
+    TELEPORT_CONFIRM(0x00, new ServerboundTeleportConfirmMessage(), Status.PLAY),
     CLIENT_STATUS(0x04, new ServerboundClientStatusMessage(), Status.PLAY),
     CLIENT_SETTINGS(0x05, new ServerboundClientSettingsMessage(), Status.PLAY);
 

@@ -27,6 +27,7 @@ public class PacketDecoder extends ByteToMessageDecoder
 
             AbstractMessage message = Messages.getById(status, j);
             if (message != null) {
+                System.out.println("Incoming packet with length " + i + " and ID " + j);
                 System.out.println("USING " + message.getClass().getName() + " PACKET");
                 message.deserialize(ctx, packetBuffer);
 

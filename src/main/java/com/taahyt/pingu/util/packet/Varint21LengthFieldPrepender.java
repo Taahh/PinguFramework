@@ -4,6 +4,12 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
 
+/**
+ * Yoinked from MC's Game Code
+ *
+ * @author mojang
+ */
+
 public class Varint21LengthFieldPrepender extends MessageToByteEncoder<ByteBuf>
 {
 
@@ -13,9 +19,11 @@ public class Varint21LengthFieldPrepender extends MessageToByteEncoder<ByteBuf>
     {
         int i = p_130572_.readableBytes();
         int j = PacketBuffer.getVarIntSize(i);
-        if (j > 3) {
+        if (j > 3)
+        {
             throw new IllegalArgumentException("unable to fit " + i + " into 3");
-        } else {
+        } else
+        {
             PacketBuffer packetBuffer = new PacketBuffer(p_130573_);
             packetBuffer.ensureWritable(j + i);
             packetBuffer.writeVarInt(i);

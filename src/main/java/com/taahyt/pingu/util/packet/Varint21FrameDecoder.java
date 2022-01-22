@@ -8,6 +8,12 @@ import io.netty.handler.codec.CorruptedFrameException;
 
 import java.util.List;
 
+/**
+ * Yoinked from MC's Game Code
+ *
+ * @author mojang
+ */
+
 public class Varint21FrameDecoder extends ByteToMessageDecoder
 {
    protected void decode(ChannelHandlerContext p_130566_, ByteBuf p_130567_, List<Object> p_130568_) {

@@ -2,6 +2,7 @@ package com.taahyt.pingu.messages.login;
 
 import com.taahyt.pingu.PinguFramework;
 import com.taahyt.pingu.messages.AbstractMessage;
+import com.taahyt.pingu.util.MojangUtil;
 import com.taahyt.pingu.util.packet.PacketBuffer;
 import com.taahyt.pingu.util.Status;
 import io.netty.buffer.ByteBuf;
@@ -30,11 +31,13 @@ public class ClientboundLoginSuccessMessage extends AbstractMessage
     public ByteBuf serialize(ChannelHandlerContext channel)
     {
         try {
-            UUID uuid;
             System.out.println("Login Success?");
             PacketBuffer buffer = new PacketBuffer();
             buffer.writeVarInt(this.getPacketId());
-            buffer.writeUUID(uuid = UUID.randomUUID());
+
+            UUID uuid = UUID.fromString(MojangUtil.getUUID(this.username));
+            System.out.println("UUID: " + uuid.toString());
+            buffer.writeUUID(UUID.randomUUID());
             buffer.writeString(this.username);
             PinguFramework.CLIENTS.put(channel, Status.PLAY);
 

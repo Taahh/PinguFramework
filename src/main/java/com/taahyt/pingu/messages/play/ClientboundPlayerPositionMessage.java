@@ -5,11 +5,13 @@ import com.taahyt.pingu.util.packet.PacketBuffer;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 
-public class ClientboundCommandPacket extends AbstractMessage
+public class ClientboundPlayerPositionMessage extends AbstractMessage
 {
-    public ClientboundCommandPacket()
+    public final int teleportId;
+    public ClientboundPlayerPositionMessage(int teleportId)
     {
-        super(0x12);
+        super(0x38);
+        this.teleportId = teleportId;
     }
 
     @Override
@@ -21,10 +23,17 @@ public class ClientboundCommandPacket extends AbstractMessage
     @Override
     public ByteBuf serialize(ChannelHandlerContext channel)
     {
-        System.out.println("Command");
+        System.out.println("Position");
         PacketBuffer buffer = new PacketBuffer();
         buffer.writeVarInt(this.getPacketId());
-        buffer.writeVarInt(0);
+        buffer.writeDouble(0);
+        buffer.writeDouble(64);
+        buffer.writeDouble(0);
+        buffer.writeFloat(0);
+        buffer.writeFloat(0);
+        buffer.writeByte(0);
+        buffer.writeVarInt(this.teleportId);
+        buffer.writeBoolean(false);
         return buffer;
     }
 }

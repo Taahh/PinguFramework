@@ -12,6 +12,8 @@ public class Tag
 
     private final String name;
     private final List<Integer> values = Lists.newArrayList();
+    private final List<String> queuedValues = Lists.newArrayList();
+    private final List<Tag> children = Lists.newArrayList();
 
     public void write(PacketBuffer buffer)
     {

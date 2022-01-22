@@ -5,11 +5,11 @@ import com.taahyt.pingu.util.packet.PacketBuffer;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 
-public class ClientboundTagPacket extends AbstractMessage
+public class ClientboundUnlockRecipesMessage extends AbstractMessage
 {
-    public ClientboundTagPacket()
+    public ClientboundUnlockRecipesMessage()
     {
-        super(0x67);
+        super(0x39);
     }
 
     @Override
@@ -21,14 +21,11 @@ public class ClientboundTagPacket extends AbstractMessage
     @Override
     public ByteBuf serialize(ChannelHandlerContext channel)
     {
-        System.out.println("Tags!");
+        System.out.println("Unlock Recipes");
         PacketBuffer buffer = new PacketBuffer();
         buffer.writeVarInt(this.getPacketId());
+        buffer.writeInt(0);
+        buffer.writeByte(28);
         return buffer;
-    }
-
-    public void doTags()
-    {
-
     }
 }
