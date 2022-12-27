@@ -2,3 +2,6 @@
 /.gradle/
 /.idea/
 /generated/
+data/*
+*.iml
+*.snbt
