@@ -6,8 +6,6 @@ import io.netty.buffer.Unpooled;
 import io.netty.handler.codec.DecoderException;
 import io.netty.handler.codec.EncoderException;
 import io.netty.util.ByteProcessor;
-//import net.querz.nbt.io.NBTOutputStream;
-//import net.querz.nbt.tag.Tag;
 import net.kyori.adventure.nbt.BinaryTagIO;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import org.jetbrains.annotations.Nullable;
@@ -23,9 +21,7 @@ import java.nio.channels.GatheringByteChannel;
 import java.nio.channels.ScatteringByteChannel;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.util.Collection;
-import java.util.Date;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.BiConsumer;
 
 /**
@@ -36,6 +32,9 @@ import java.util.function.BiConsumer;
  */
 public class PacketBuffer extends ByteBuf
 {
+
+    private static final int SEGMENT_BITS = 0x7F;
+    private static final int CONTINUE_BIT = 0x80;
     private final ByteBuf byteBuf;
 
     public PacketBuffer()
@@ -163,30 +162,30 @@ public class PacketBuffer extends ByteBuf
         return this;
     }
 
-    /**
-     * Reads a length-prefixed array of longs from the buffer.
-     */
-    public long[] readLongArray(@Nullable long[] array)
-    {
-        return this.readLongArray(array, this.readableBytes() / 8);
+    public long[] readLongArray() {
+    return this.readLongArray((long[]) null);
+}
+
+    public long[] readLongArray(@javax.annotation.Nullable long[] toArray) {
+        return this.readLongArray(toArray, this.readableBytes() / 8);
     }
 
-    public long[] readLongArray(@Nullable long[] array, int maxLength)
-    {
-        int i = this.readVarInt();
-        if (array == null || array.length != i) {
-            if (i > maxLength) {
-                throw new DecoderException("LongArray with size " + i + " is bigger than allowed " + maxLength);
+    public long[] readLongArray(@javax.annotation.Nullable long[] toArray, int maxSize) {
+        int j = this.readVarInt();
+
+        if (toArray == null || toArray.length != j) {
+            if (j > maxSize) {
+                throw new DecoderException("LongArray with size " + j + " is bigger than allowed " + maxSize);
             }
 
-            array = new long[i];
+            toArray = new long[j];
         }
 
-        for (int j = 0; j < array.length; ++j) {
-            array[j] = this.readLong();
+        for (int k = 0; k < toArray.length; ++k) {
+            toArray[k] = this.readLong();
         }
 
-        return array;
+        return toArray;
     }
 
     public <T extends Enum<T>> T readEnumValue(Class<T> enumClass)
@@ -232,22 +231,22 @@ public class PacketBuffer extends ByteBuf
      */
     public int readVarInt()
     {
-        int i = 0;
-        int j = 0;
+        int value = 0;
+        int position = 0;
+        byte currentByte;
 
         while (true) {
-            byte b0 = this.readByte();
-            i |= (b0 & 127) << j++ * 7;
-            if (j > 5) {
-                throw new RuntimeException("VarInt too big");
-            }
+            currentByte = readByte();
+            value |= (currentByte & SEGMENT_BITS) << position;
 
-            if ((b0 & 128) != 128) {
-                break;
-            }
+            if ((currentByte & CONTINUE_BIT) == 0) break;
+
+            position += 7;
+
+            if (position >= 32) throw new RuntimeException("VarInt is too big");
         }
 
-        return i;
+        return value;
     }
 
     public long readVarLong()
@@ -324,6 +323,58 @@ public class PacketBuffer extends ByteBuf
         }
 
         return this;
+    }
+
+    public <E extends Enum<E>> void writeEnumSet(EnumSet<E> enumSet, Class<E> type) {
+        E[] ae = type.getEnumConstants(); // CraftBukkit - decompile error
+        BitSet bitset = new BitSet(ae.length);
+
+        for (int i = 0; i < ae.length; ++i) {
+            bitset.set(i, enumSet.contains(ae[i]));
+        }
+
+        this.writeFixedBitSet(bitset, ae.length);
+    }
+
+    public <E extends Enum<E>> EnumSet<E> readEnumSet(Class<E> type) {
+        E[] ae = type.getEnumConstants(); // CraftBukkit - decompile error
+        BitSet bitset = this.readFixedBitSet(ae.length);
+        EnumSet<E> enumset = EnumSet.noneOf(type);
+
+        for (int i = 0; i < ae.length; ++i) {
+            if (bitset.get(i)) {
+                enumset.add(ae[i]);
+            }
+        }
+
+        return enumset;
+    }
+
+    public BitSet readBitSet() {
+        return BitSet.valueOf(this.readLongArray());
+    }
+
+    public void writeBitSet(BitSet bitSet) {
+        this.writeLongArray(bitSet.toLongArray());
+    }
+
+    public BitSet readFixedBitSet(int size) {
+        byte[] abyte = new byte[-Math.floorDiv(-size, 8)];
+
+        this.readBytes(abyte);
+        return BitSet.valueOf(abyte);
+    }
+
+    public void writeFixedBitSet(BitSet bitSet, int size) {
+        if (bitSet.length() > size) {
+            int j = bitSet.length();
+
+            throw new EncoderException("BitSet is larger than expected size (" + j + ">" + size + ")");
+        } else {
+            byte[] abyte = bitSet.toByteArray();
+
+            this.writeBytes(Arrays.copyOf(abyte, -Math.floorDiv(-size, 8)));
+        }
     }
 
     public String readString()

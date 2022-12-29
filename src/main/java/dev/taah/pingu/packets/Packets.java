@@ -3,6 +3,8 @@ package dev.taah.pingu.packets;
 import dev.taah.pingu.client.Status;
 import dev.taah.pingu.packets.handshake.ServerboundHandshakePacket;
 import dev.taah.pingu.packets.login.ServerboundLoginPacket;
+import dev.taah.pingu.packets.play.ServerboundClientInfoPacket;
+import dev.taah.pingu.packets.play.ServerboundConfirmTeleportPacket;
 import dev.taah.pingu.packets.status.ServerboundPingPacket;
 import dev.taah.pingu.packets.status.ServerboundStatusPacket;
 import lombok.Getter;
@@ -15,7 +17,10 @@ public enum Packets
     HANDSHAKE(0x00, new ServerboundHandshakePacket(), Status.HANDSHAKE),
     STATUS_REQUEST(0x00, new ServerboundStatusPacket(), Status.STATUS),
     PING_REQUEST(0x01, new ServerboundPingPacket(), Status.STATUS),
-    LOGIN_START(0x00, new ServerboundLoginPacket(), Status.LOGIN);
+    LOGIN_START(0x00, new ServerboundLoginPacket(), Status.LOGIN),
+
+    CONFIRM_TELEPORT(0x00, new ServerboundConfirmTeleportPacket(), Status.PLAY),
+    CLIENT_INFORMATION(0x07, new ServerboundClientInfoPacket(), Status.PLAY);
 
     @Getter
     private final int packetId;

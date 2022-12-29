@@ -4,6 +4,7 @@ import dev.taah.pingu.PinguFramework;
 import dev.taah.pingu.client.Status;
 import dev.taah.pingu.packets.AbstractPacket;
 import dev.taah.pingu.packets.Packets;
+import dev.taah.pingu.util.Logger;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufUtil;
 import io.netty.channel.ChannelHandlerContext;
@@ -22,6 +23,7 @@ public class PacketDecoder extends ByteToMessageDecoder
             PacketBuffer packetBuffer = new PacketBuffer(in);
             int j = packetBuffer.readVarInt();
             System.out.println("Incoming packet with length " + i + " and ID " + j);
+            System.out.println(ByteBufUtil.prettyHexDump(packetBuffer));
 
             Status status = PinguFramework.CLIENTS.getOrDefault(ctx, Status.HANDSHAKE);
 
@@ -29,11 +31,25 @@ public class PacketDecoder extends ByteToMessageDecoder
             if (message != null) {
                 System.out.println("Incoming packet with length " + i + " and ID " + j);
                 System.out.println("USING " + message.getClass().getName() + " PACKET");
-                message.deserialize(ctx, packetBuffer);
+                if (packetBuffer.readableBytes() >= 1) {
+                    message.deserialize(ctx, packetBuffer);
+                }
 
                 ByteBuf serializedMsg = message.serialize(ctx);
                 if (serializedMsg != null) ctx.writeAndFlush(serializedMsg);
             }
+        }
+    }
+
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception
+    {
+        try
+        {
+            throw cause;
+        } catch (Throwable e)
+        {
+            throw new RuntimeException(e);
         }
     }
 }

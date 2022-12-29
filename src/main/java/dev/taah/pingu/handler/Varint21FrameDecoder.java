@@ -16,30 +16,41 @@ import java.util.List;
 
 public class Varint21FrameDecoder extends ByteToMessageDecoder
 {
-    protected void decode(ChannelHandlerContext p_130566_, ByteBuf p_130567_, List<Object> p_130568_) {
-        p_130567_.markReaderIndex();
-        byte[] abyte = new byte[3];
+    private final byte[] lenBuf = new byte[3]; // Paper
+    @Override
+    protected void decode(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf, List<Object> list) {
+        // Paper start - if channel is not active just discard the packet
+        if (!channelHandlerContext.channel().isActive()) {
+            byteBuf.skipBytes(byteBuf.readableBytes());
+            return;
+        }
+        // Paper end
+        byteBuf.markReaderIndex();
+        // Paper start - reuse temporary length buffer
+        byte[] bs = lenBuf;
+        java.util.Arrays.fill(bs, (byte) 0);
+        // Paper end
 
-        for(int i = 0; i < abyte.length; ++i) {
-            if (!p_130567_.isReadable()) {
-                p_130567_.resetReaderIndex();
+        for(int i = 0; i < bs.length; ++i) {
+            if (!byteBuf.isReadable()) {
+                byteBuf.resetReaderIndex();
                 return;
             }
 
-            abyte[i] = p_130567_.readByte();
-            if (abyte[i] >= 0) {
-                PacketBuffer packetBuffer = new PacketBuffer(Unpooled.wrappedBuffer(abyte));
+            bs[i] = byteBuf.readByte();
+            if (bs[i] >= 0) {
+                PacketBuffer friendlyByteBuf = new PacketBuffer(Unpooled.wrappedBuffer(bs));
 
                 try {
-                    int j = packetBuffer.readVarInt();
-                    if (p_130567_.readableBytes() >= j) {
-                        p_130568_.add(p_130567_.readBytes(j));
+                    int j = friendlyByteBuf.readVarInt();
+                    if (byteBuf.readableBytes() >= j) {
+                        list.add(byteBuf.readBytes(j));
                         return;
                     }
 
-                    p_130567_.resetReaderIndex();
+                    byteBuf.resetReaderIndex();
                 } finally {
-                    packetBuffer.release();
+                    friendlyByteBuf.release();
                 }
 
                 return;

@@ -25,8 +25,8 @@ public class ClientboundStatusPacket extends AbstractPacket
         PacketBuffer buffer = new PacketBuffer();
         JSONObject object = new JSONObject();
         object.put("version", new JSONObject());
-        ((JSONObject)object.get("version")).put("name", "1.19");
-        ((JSONObject)object.get("version")).put("protocol", 760);
+        ((JSONObject)object.get("version")).put("name", "1.19.3");
+        ((JSONObject)object.get("version")).put("protocol", 761);
 
         object.put("players", new JSONObject());
         ((JSONObject)object.get("players")).put("max", 100);

@@ -2,20 +2,16 @@ package dev.taah.pingu.server;
 
 public enum GameMode
 {
-    UNDEFINED(-1),
-    SURVIVAL(0),
-    CREATIVE(1),
-    ADVENTURE(2),
-    SPECTATOR(3);
-    private final int mode;
+    UNDEFINED(-1), SURVIVAL(0), CREATIVE(1), ADVENTURE(2), SPECTATOR(3);
+    private final int data;
 
-    GameMode(int mode)
+    GameMode(int data)
     {
-        this.mode = mode;
+        this.data = data;
     }
 
-    public int getNumber()
+    public int getData()
     {
-        return mode;
+        return data;
     }
 }

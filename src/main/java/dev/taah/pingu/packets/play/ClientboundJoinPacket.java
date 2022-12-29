@@ -1,5 +1,6 @@
 package dev.taah.pingu.packets.play;
 
+import com.google.common.hash.Hashing;
 import dev.taah.pingu.PinguFramework;
 import dev.taah.pingu.entity.Player;
 import dev.taah.pingu.handler.PacketBuffer;
@@ -13,10 +14,10 @@ import net.kyori.adventure.nbt.ListBinaryTag;
 
 import java.util.stream.Collectors;
 
-public class ClientboundLoginPacket extends AbstractPacket
+public class ClientboundJoinPacket extends AbstractPacket
 {
     private final Player player;
-    public ClientboundLoginPacket(Player player)
+    public ClientboundJoinPacket(Player player)
     {
         this.player = player;
     }
@@ -35,21 +36,22 @@ public class ClientboundLoginPacket extends AbstractPacket
 
         final PacketBuffer buffer = new PacketBuffer();
 
-        buffer.writeVarInt(0x25);
+        buffer.writeVarInt(0x24);
         buffer.writeInt(player.getId());
         buffer.writeBoolean(server.getServerSettings().hardcore);
-        buffer.writeByte(server.getServerSettings().gameMode.getNumber());
-        buffer.writeByte(player.getGameMode() == GameMode.UNDEFINED ? server.getServerSettings().gameMode.getNumber() : player.getGameMode().getNumber());
+        buffer.writeByte(server.getServerSettings().gameMode.getData());
+        buffer.writeByte(player.getGameMode() == GameMode.UNDEFINED ? server.getServerSettings().gameMode.getData() : player.getGameMode().getData());
 
         final ListBinaryTag dimensions = (ListBinaryTag) registryCodec.getCompound("minecraft:dimension_type").get("value");
         buffer.writeCollection(dimensions.stream().map(binaryTag -> ((CompoundBinaryTag)binaryTag).getString("name")).collect(Collectors.toList()), (packetBuffer, s) -> {
-            System.out.println(s);
+//            System.out.println(s);
             packetBuffer.writeString(s);
         });
         buffer.writeNbt(registryCodec);
-        buffer.writeString("minecraft:dimension_type");
+
         buffer.writeString("minecraft:overworld");
-        buffer.writeLong("North Carolina".hashCode());
+        buffer.writeString("minecraft:overworld");
+        buffer.writeLong(Hashing.sha256().hashLong("North Carolina".hashCode()).asLong());
         buffer.writeVarInt(100);
         buffer.writeVarInt(16);
         buffer.writeVarInt(16);
