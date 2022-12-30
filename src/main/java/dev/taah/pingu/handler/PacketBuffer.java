@@ -1,4 +1,5 @@
 package dev.taah.pingu.handler;
+import dev.taah.pingu.world.Location;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.ByteBufOutputStream;
@@ -322,6 +323,12 @@ public class PacketBuffer extends ByteBuf
             }
         }
 
+        return this;
+    }
+
+    public PacketBuffer writeLocation(Location location)
+    {
+        this.writeLong((((long) ((int)location.getX()) & (long) 67108863) << 38) | (((long) ((int)location.getY()) & (long) 4095)) | (((long) ((int)location.getZ()) & (long) 67108863) << 12));
         return this;
     }
 

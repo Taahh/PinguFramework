@@ -34,19 +34,6 @@ public class ServerboundClientInfoPacket extends AbstractPacket
             boolean textFiltering = buf.readBoolean();
             boolean serverListings = buf.readBoolean();
             Logger.log("CLIENT INFO {0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}", locale, viewDistance, chatMode.name(), chatColors, skinParts, mainHand.name(), textFiltering, serverListings);
-            channel.writeAndFlush(new ClientboundHoldItemPacket(0).serialize(channel));
-            channel.writeAndFlush(new ClientboundRecipesPacket().serialize(channel));
-            channel.writeAndFlush(new ClientboundTagsPacket().serialize(channel));
-            channel.writeAndFlush(new ClientboundEntityEventPacket(channel.channel().attr(Player.PLAYER_ATTRIBUTE_KEY).get().getId(), 28).serialize(channel));
-            channel.writeAndFlush(new ClientboundCommandsPacket().serialize(channel));
-            channel.writeAndFlush(new ClientboundPlayerPosPacket(new Location(null, 0, 0, 0)).serialize(channel));
-
-            final Player player = channel.channel().attr(Player.PLAYER_ATTRIBUTE_KEY).get();
-
-            channel.writeAndFlush(new ClientboundPlayerInfoUpdatePacket(EnumSet.of(ClientboundPlayerInfoUpdatePacket.Action.ADD_PLAYER), Collections.singletonList(player)));
-            channel.writeAndFlush(new ClientboundPlayerInfoUpdatePacket(EnumSet.of(ClientboundPlayerInfoUpdatePacket.Action.UPDATE_LATENCY), Collections.singletonList(player)));
-            channel.writeAndFlush(new ClientboundPlayerPosPacket(new Location(null, 0, 0, 0)).serialize(channel));
-            channel.writeAndFlush(new ClientboundRespawnPacket(player).serialize(channel));
         }
         catch (Exception e)
         {

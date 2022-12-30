@@ -103,14 +103,12 @@ public class ClientboundCommandsPacket extends AbstractPacket
             {
                 b = (byte) (b | 16);
             }
-        } else
+        } else if (node instanceof LiteralCommandNode)
         {
-            if (!(node instanceof LiteralCommandNode))
-            {
-                throw new UnsupportedOperationException("Unknown node type " + node);
-            }
-
             b = (byte) (b | 1);
+        } else if (!(node instanceof RootCommandNode))
+        {
+            throw new UnsupportedOperationException("Unknown node type " + node);
         }
 
         buf.writeByte(b);
