@@ -9,12 +9,11 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.EnumSet;
 import java.util.Set;
+import java.util.concurrent.ThreadLocalRandom;
 
 @RequiredArgsConstructor
-public class ClientboundDefaultSpawnPacket extends AbstractPacket
+public class ClientboundKeepAlivePacket extends AbstractPacket
 {
-    private final Location location;
-
     @Override
     public void deserialize(ChannelHandlerContext channel, PacketBuffer buf)
     {
@@ -27,11 +26,9 @@ public class ClientboundDefaultSpawnPacket extends AbstractPacket
 
         final PacketBuffer buffer = new PacketBuffer();
 
-        buffer.writeVarInt(0x4C);
-        buffer.writeLocation(location);
-        buffer.writeFloat(90);
+        buffer.writeVarInt(0x1F);
+        buffer.writeLong(ThreadLocalRandom.current().nextLong(0, Long.MAX_VALUE));
 
         return buffer;
     }
-
 }

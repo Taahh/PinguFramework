@@ -11,9 +11,8 @@ import java.util.EnumSet;
 import java.util.Set;
 
 @RequiredArgsConstructor
-public class ClientboundDefaultSpawnPacket extends AbstractPacket
+public class ClientboundPlayerAbilitiesPacket extends AbstractPacket
 {
-    private final Location location;
 
     @Override
     public void deserialize(ChannelHandlerContext channel, PacketBuffer buf)
@@ -27,11 +26,15 @@ public class ClientboundDefaultSpawnPacket extends AbstractPacket
 
         final PacketBuffer buffer = new PacketBuffer();
 
-        buffer.writeVarInt(0x4C);
-        buffer.writeLocation(location);
-        buffer.writeFloat(90);
+        byte b = 0;
+        b |= 1;
+        b |= 2;
+        b |= 4;
+        buffer.writeVarInt(0x30);
+        buffer.writeByte(b);
+        buffer.writeFloat(1.5f);
+        buffer.writeFloat(0.5f);
 
         return buffer;
     }
-
 }

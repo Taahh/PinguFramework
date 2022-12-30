@@ -42,7 +42,7 @@ public class ClientboundRespawnPacket extends AbstractPacket
         buffer.writeByte(player.getGameMode() == GameMode.UNDEFINED ? server.getServerSettings().gameMode.getData() : player.getGameMode().getData());
         buffer.writeByte(-1);
         buffer.writeBoolean(false);
-        buffer.writeBoolean(true);
+        buffer.writeBoolean(false);
         buffer.writeBoolean(false);
         buffer.writeBoolean(false);
 

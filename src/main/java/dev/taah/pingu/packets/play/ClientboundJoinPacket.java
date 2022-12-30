@@ -44,7 +44,6 @@ public class ClientboundJoinPacket extends AbstractPacket
 
         final ListBinaryTag dimensions = (ListBinaryTag) registryCodec.getCompound("minecraft:dimension_type").get("value");
         buffer.writeCollection(dimensions.stream().map(binaryTag -> ((CompoundBinaryTag)binaryTag).getString("name")).collect(Collectors.toList()), (packetBuffer, s) -> {
-//            System.out.println(s);
             packetBuffer.writeString(s);
         });
         buffer.writeNbt(registryCodec);
@@ -57,7 +56,7 @@ public class ClientboundJoinPacket extends AbstractPacket
         buffer.writeVarInt(16);
         buffer.writeBoolean(false);
         buffer.writeBoolean(true);
-        buffer.writeBoolean(true);
+        buffer.writeBoolean(false);
         buffer.writeBoolean(false);
         buffer.writeBoolean(false);
 

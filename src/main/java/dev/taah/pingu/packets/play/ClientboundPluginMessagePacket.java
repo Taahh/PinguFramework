@@ -2,18 +2,11 @@ package dev.taah.pingu.packets.play;
 
 import dev.taah.pingu.handler.PacketBuffer;
 import dev.taah.pingu.packets.AbstractPacket;
-import dev.taah.pingu.world.Location;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-import lombok.RequiredArgsConstructor;
 
-import java.util.EnumSet;
-import java.util.Set;
-
-@RequiredArgsConstructor
-public class ClientboundDefaultSpawnPacket extends AbstractPacket
+public class ClientboundPluginMessagePacket extends AbstractPacket
 {
-    private final Location location;
 
     @Override
     public void deserialize(ChannelHandlerContext channel, PacketBuffer buf)
@@ -24,14 +17,12 @@ public class ClientboundDefaultSpawnPacket extends AbstractPacket
     @Override
     public ByteBuf serialize(ChannelHandlerContext channel)
     {
-
         final PacketBuffer buffer = new PacketBuffer();
 
-        buffer.writeVarInt(0x4C);
-        buffer.writeLocation(location);
-        buffer.writeFloat(90);
+        buffer.writeVarInt(0x15);
+        buffer.writeString("minecraft:brand");
+        buffer.writeByteArray("Pingu Server".getBytes());
 
         return buffer;
     }
-
 }
